@@ -4,6 +4,9 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 import axios from "axios"
+import MovieE from './components/movieEe.jsx';
+import MovieF from "./components/movieIf.jsx";
+import MovieT from './components/movieTe.jsx';
 
 function App() {
  const [count, setCount] = useState(0);
@@ -28,7 +31,7 @@ const res3 = await axios.get(
 
 setPokemon(res3.data);
 const res4 = await axios.get(
-   "https://www.omdbapi.com/?i=tt10872600&apikey=81c5a341"
+   `https://www.omdbapi.com/?i=tt10872600&apikey=${import.meta.env.VITE_OMDB_API_KEY}`
 );
 setFilme(res4.data);
 console.log("Success:", res.data); 
@@ -50,7 +53,9 @@ if(error){return(<div>Ocorreu um erro</div>)}
       <section id="center">
         <div className="hero">
           <img src={dragonBall.image} className="base" width="170" height="179" alt="" />
-          
+          <MovieE />
+          <MovieF />
+          <MovieT />
         </div>
         <div>
           <h1>{person[44].nome}</h1>

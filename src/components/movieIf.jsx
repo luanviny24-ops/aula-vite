@@ -4,7 +4,7 @@ import axios from 'axios';
 export default function MovieIf() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState('star wars');
+  const [query, setQuery] = useState('');
   const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 
   useEffect(() => {

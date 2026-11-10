@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 function MovieEe() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState('Avengers');
+  const [query, setQuery] = useState('');
   const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 
   useEffect(() => {

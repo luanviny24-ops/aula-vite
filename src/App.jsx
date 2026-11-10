@@ -16,6 +16,8 @@ const [loading, setLoading] = useState(true);
 const [pokemon, setPokemon] = useState({});
 const [filme, setFilme] = useState({});
 const [error, setError] = useState(false);
+const [mostrarEvolucao, setMostrarEvolucao] = useState(false);
+const [etapaEvolucao, setEtapaEvolucao] = useState(0);
 useEffect(() => { 
 const getData = async () => { 
 try { 
@@ -65,6 +67,35 @@ if(error){return(<div>Ocorreu um erro</div>)}
           <h2>Meu pet: {pokemon.name}</h2>
           <img src={pokemon.sprites?.front_default} alt="Bulbasaur" width="150" />
           <p>Tipo: {pokemon.types?.map((tipo) => tipo.type.name).join(", ")}</p>
+          <div style={{ textAlign: "center" }}>
+  <h3>Evolução do Bulbasaur</h3>
+
+  <h2>
+    {["Bulbasaur", "Ivysaur", "Venusaur"][etapaEvolucao]}
+  </h2>
+
+  <img
+    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${etapaEvolucao + 1}.png`}
+    alt="Evolução do Pokémon"
+    width="150"
+  />
+
+  <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+    <button
+      onClick={() => setEtapaEvolucao(etapaEvolucao - 1)}
+      disabled={etapaEvolucao === 0}
+    >
+      ⬅ Anterior
+    </button>
+
+    <button
+      onClick={() => setEtapaEvolucao(etapaEvolucao + 1)}
+      disabled={etapaEvolucao === 2}
+    >
+      Próximo ➡
+    </button>
+  </div>
+</div>
         </div>
         <div className="filme-card">
         <h2>Meu filme favorito: {filme.Title}</h2>

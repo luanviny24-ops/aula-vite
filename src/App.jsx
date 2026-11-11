@@ -1,7 +1,4 @@
 import { useState, useEffect } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
 import axios from "axios"
 import MovieE from './components/movieEe.jsx';
@@ -9,14 +6,12 @@ import MovieF from "./components/movieIf.jsx";
 import MovieT from './components/movieTe.jsx';
 
 function App() {
- const [count, setCount] = useState(0);
 const [person, setPerson] = useState({});
 const [dragonBall, setDragonBall] = useState({});
 const [loading, setLoading] = useState(true);
 const [pokemon, setPokemon] = useState({});
 const [filme, setFilme] = useState({});
 const [error, setError] = useState(false);
-const [mostrarEvolucao, setMostrarEvolucao] = useState(false);
 const [etapaEvolucao, setEtapaEvolucao] = useState(0);
 useEffect(() => { 
 const getData = async () => { 

@@ -380,8 +380,17 @@ body {
 
 .perfil-card,
 .filme-card {
-  animation: aparecerCard 0.8s ease-out both;
+  animation: aparecerCard 0.8s ease-out backwards;
 }
 .filme-card {
   animation-delay: 0.2s;
+} 
+
+.perfil-card,
+.filme-card {
+  transition: transform 0.15s ease-out, box-shadow 0.3s;
+}
+.perfil-card:hover,
+.filme-card:hover {
+  box-shadow: 0 0 30px #19ffe3aa;
 }

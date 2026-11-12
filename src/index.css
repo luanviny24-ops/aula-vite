@@ -377,3 +377,11 @@ body {
   color: #19ffe3;
   font-size: 20px;
 }
+
+.perfil-card,
+.filme-card {
+  animation: aparecerCard 0.8s ease-out both;
+}
+.filme-card {
+  animation-delay: 0.2s;
+}

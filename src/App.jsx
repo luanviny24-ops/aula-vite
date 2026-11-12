@@ -43,7 +43,8 @@ setError(true);
 getData(); 
 }, []);
 
-if(loading){return (<div>Carregando</div>)}
+if(loading){return (<div className="carregando"><div className="carregando-circulo">
+  </div><p>Carregando...</p></div>)}
 if(error){return(<div>Ocorreu um erro</div>)}
   return (
     <>

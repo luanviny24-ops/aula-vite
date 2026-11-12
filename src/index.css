@@ -350,3 +350,30 @@ body {
   border-color: #19ffe355;
   color: #19ffe3aa;
 }
+
+.carregando {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.carregando-circulo {
+  width: 60px;
+  height: 60px;
+  border: 5px solid #19ffe333;
+  border-top-color: #19ffe3;
+  border-radius: 50%;
+  box-shadow: 0 0 20px #19ffe355;
+  animation: girar 1s linear infinite;
+}
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.carregando p {
+  color: #19ffe3;
+  font-size: 20px;
+}

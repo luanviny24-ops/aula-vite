@@ -13,6 +13,7 @@ const [pokemon, setPokemon] = useState({});
 const [filme, setFilme] = useState({});
 const [error, setError] = useState(false);
 const [etapaEvolucao, setEtapaEvolucao] = useState(0);
+const [statusEvolucao, setStatusEvolucao] = useState({});
 useEffect(() => { 
 const getData = async () => { 
 try { 
@@ -43,6 +44,20 @@ setError(true);
 getData(); 
 }, []);
 
+useEffect(() => {
+  const buscarStatus = async () => {
+    try {
+      const res = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${etapaEvolucao + 1}`
+      );
+      setStatusEvolucao(res.data);
+    } catch (e) {
+      console.error("Erro ao carregar status da evolução", e);
+    }
+  };
+  buscarStatus();
+}, [etapaEvolucao]);
+
 if(loading){return (<div className="carregando"><div className="carregando-circulo">
   </div><p>Carregando...</p></div>)}
 if(error){return(<div>Ocorreu um erro</div>)}
@@ -58,12 +73,12 @@ if(error){return(<div>Ocorreu um erro</div>)}
         </div>
         </div>
         <div className="cards-container">
-        <div className="perfil-card">
-          <p>Raça: {dragonBall.race}</p>
-          <h2>Meu pet: {pokemon.name}</h2>
-          <img src={pokemon.sprites?.front_default} alt="Bulbasaur" width="150" />
-          <p>Tipo: {pokemon.types?.map((tipo) => tipo.type.name).join(", ")}</p>
-          <div style={{ textAlign: "center" }}>
+       <div className="perfil-card">
+  <p>Raça: {dragonBall.race}</p>
+  <h2>Meu pet: {pokemon.name}</h2>
+  <img src={pokemon.sprites?.front_default} alt="Bulbasaur" width="150" />
+  <p>Tipo: {pokemon.types?.map((tipo) => tipo.type.name).join(", ")}</p>
+  <div style={{ textAlign: "center" }}>
   <h3>Evolução do Bulbasaur</h3>
 
   <h2>
@@ -75,6 +90,17 @@ if(error){return(<div>Ocorreu um erro</div>)}
     alt="Evolução do Pokémon"
     width="150"
   />
+  <div className="status-pokemon">
+  {statusEvolucao.stats?.map((s) => (
+    <div className="status-linha" key={etapaEvolucao + s.stat.name}>
+      <span>{{ hp: "HP", attack: "Ataque", defense: "Defesa", "special-attack": "Atq. Esp.", "special-defense": "Def. Esp.", speed: "Veloc." }[s.stat.name]}</span>
+      <div className="status-barra">
+        <div className="status-preenchimento" style={{ width: `${Math.min(s.base_stat, 100)}%` }}></div>
+      </div>
+      <span>{s.base_stat}</span>
+    </div>
+  ))}
+</div>
 
   <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
     <button

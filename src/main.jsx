@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import './estrelas.js'
 import './inclinar.js'
+import './brilho.js'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

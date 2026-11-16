@@ -427,3 +427,13 @@ body {
     width: 0;
   }
 }
+
+.poster-filme {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin: 10px auto 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #19ffe3aa;
+}

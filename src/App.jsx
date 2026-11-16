@@ -121,6 +121,9 @@ if(error){return(<div>Ocorreu um erro</div>)}
         </div>
         <div className="filme-card">
         <h2>Meu filme favorito: {filme.Title}</h2>
+        {filme.Poster && filme.Poster !== "N/A" && (
+  <img src={filme.Poster} alt={`Pôster de ${filme.Title}`} className="poster-filme" />
+)}
           <p>Gênero: {filme.Genre}</p>
           <p>Premiações: {filme.Awards}</p>
           <p>Nota IMDb: {filme.imdbRating}</p>

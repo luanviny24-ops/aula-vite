@@ -60,7 +60,7 @@ useEffect(() => {
 
 if(loading){return (<div className="carregando"><div className="carregando-circulo">
   </div><p>Carregando...</p></div>)}
-if(error){return(<div>Ocorreu um erro</div>)}
+if(error){return (<div className="erro-tela"><div className="erro-icone">⚠</div><h2>Ops! Algo deu errado</h2><p>Não foi possível carregar os dados. Verifique sua internet e tente novamente.</p><button onClick={() => window.location.reload()}>Tentar de novo</button></div>)}
   return (
     <>
       <section id="center">

@@ -452,3 +452,41 @@ body {
   opacity: 0;
   transition: opacity 0.4s, transform 0.15s ease-out;
 }
+
+.erro-tela {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  text-align: center;
+}
+.erro-icone {
+  font-size: 60px;
+  color: #ff4d6d;
+  text-shadow: 0 0 20px #ff4d6d;
+}
+.erro-tela h2 {
+  color: #ff4d6d;
+}
+.erro-tela p {
+  color: white;
+  max-width: 380px;
+}
+.erro-tela button {
+  background-color: #141b35;
+  color: #19ffe3;
+  border: 2px solid #19ffe3;
+  border-radius: 10px;
+  padding: 10px 22px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.erro-tela button:hover {
+  box-shadow: 0 0 10px #19ffe3, 0 0 20px #19ffe3;
+  transform: scale(1.05);
+}

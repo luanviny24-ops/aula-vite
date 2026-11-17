@@ -614,3 +614,39 @@ margin-bottom: 10px;
   box-shadow: 0 0 15px #19ffe3;
   transform: scale(1.05);
 }
+
+.menu-topo {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  background-color: #141b35ee;
+  border-bottom: 2px solid #19ffe3;
+  box-shadow: 0 0 15px #19ffe355;
+}
+.menu-topo a {
+  color: #19ffe3;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+.menu-topo a:hover {
+  border-color: #19ffe3;
+  box-shadow: 0 0 10px #19ffe3;
+}
+.menu-topo a.active {
+  border-color: #19ffe3;
+  background-color: #19ffe322;
+}
+.trainer-container,
+.carregando,
+.erro-tela {
+  min-height: calc(100svh - 64px);
+}

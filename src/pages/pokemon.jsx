@@ -1,140 +1,187 @@
 import { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import '../App.css'
 import axios from "axios"
-import MovieE from '../components/movieEe.jsx';
-import MovieF from "../components/movieIf.jsx";
-import MovieT from '../components/movieTe.jsx';
+import { listaPokemons } from '../pokemons.js'
+
+const maiuscula = (texto) => (texto ? texto.charAt(0).toUpperCase() + texto.slice(1) : "")
+const imagemPokemon = (numero) =>
+  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${numero}.png`
 
 function Pokemon() {
-const [person, setPerson] = useState({});
-const [dragonBall, setDragonBall] = useState({});
-const [loading, setLoading] = useState(true);
-const [pokemon, setPokemon] = useState({});
-const [filme, setFilme] = useState({});
-const [error, setError] = useState(false);
-const [etapaEvolucao, setEtapaEvolucao] = useState(0);
-const [statusEvolucao, setStatusEvolucao] = useState({});
-useEffect(() => { 
-const getData = async () => { 
-try { 
-const res = await axios.get( "https://6a79e554674f43f4db11ebc8.mockapi.io/api/person" ); 
-setPerson(res.data); 
-const res2 = await axios.get(
-  "https://dragonball-api.com/api/characters/8"
-);
-setDragonBall(res2.data);
-const res3 = await axios.get(
-  "https://pokeapi.co/api/v2/pokemon/1"
-);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const idBase = Number(id) || 0;
+  const dados = listaPokemons.find((p) => p.id === idBase);
+  const evolucoes = dados ? dados.evolucoes : [idBase];
 
-setPokemon(res3.data);
-const res4 = await axios.get(
-   `https://www.omdbapi.com/?i=tt10872600&apikey=${import.meta.env.VITE_OMDB_API_KEY}`
-);
-setFilme(res4.data);
-console.log("Success:", res.data); 
-setLoading(false); 
-} 
-catch (e) { 
-console.error( "Erro ao carregar API", e ); 
-setLoading(false); 
-setError(true); 
-} 
-} 
-getData(); 
-}, []);
+  const [pokemon, setPokemon] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [etapaEvolucao, setEtapaEvolucao] = useState(0);
+  const [statusEvolucao, setStatusEvolucao] = useState({});
+  const [sorteando, setSorteando] = useState(false);
+  const [idRoleta, setIdRoleta] = useState(listaPokemons[0].id);
 
-useEffect(() => {
-  const buscarStatus = async () => {
-    try {
-      const res = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon/${etapaEvolucao + 1}`
-      );
-      setStatusEvolucao(res.data);
-    } catch (e) {
-      console.error("Erro ao carregar status da evolução", e);
-    }
+  const idEtapa = evolucoes[etapaEvolucao] ?? idBase;
+
+  const sortearPet = () => {
+    if (sorteando) return;
+    const outros = listaPokemons.filter((p) => p.id !== idBase);
+    const sorteado = outros[Math.floor(Math.random() * outros.length)];
+    setSorteando(true);
+
+    let passos = 0;
+    const intervalo = setInterval(() => {
+      const aleatorio = listaPokemons[Math.floor(Math.random() * listaPokemons.length)];
+      setIdRoleta(aleatorio.id);
+      passos++;
+      if (passos >= 20) {
+        clearInterval(intervalo);
+        setIdRoleta(sorteado.id);
+        setTimeout(() => {
+          setSorteando(false);
+          localStorage.setItem("petSorteado", sorteado.id);
+          navigate(`/pokemon/${sorteado.id}`);
+        }, 800);
+      }
+    }, 120);
   };
-  buscarStatus();
-}, [etapaEvolucao]);
 
-if(loading){return (<div className="carregando"><div className="carregando-circulo">
-  </div><p>Carregando...</p></div>)}
-if(error){return (<div className="erro-tela"><div className="erro-icone">⚠</div><h2>Ops! Algo deu errado</h2><p>Não foi possível carregar os dados. Verifique sua internet e tente novamente.</p><button onClick={() => window.location.reload()}>Tentar de novo</button></div>)}
-  return (
-    <>
+  useEffect(() => {
+    listaPokemons.forEach((p) => {
+      new Image().src = imagemPokemon(p.id);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!idBase) return;
+    const getData = async () => {
+      try {
+        setLoading(true);
+        setEtapaEvolucao(0);
+        const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${idBase}`);
+        setPokemon(res.data);
+        setLoading(false);
+      } catch (e) {
+        console.error("Erro ao carregar API", e);
+        setLoading(false);
+        setError(true);
+      }
+    };
+    getData();
+  }, [idBase]);
+
+  useEffect(() => {
+    if (!idEtapa) return;
+    const buscarStatus = async () => {
+      try {
+        const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${idEtapa}`);
+        setStatusEvolucao(res.data);
+      } catch (e) {
+        console.error("Erro ao carregar status da evolução", e);
+      }
+    };
+    buscarStatus();
+  }, [idEtapa]);
+
+  if (sorteando) {
+    return (
       <section id="center">
-        <div className="hero">
-          <img src={dragonBall.image} className="base" width="170" height="179" alt="" />
-          <div className="filmes-grid">
-          <MovieE />
-          <MovieF />
-          <MovieT />
-        </div>
-        </div>
         <div className="cards-container">
-       <div className="perfil-card">
-  <p>Raça: {dragonBall.race}</p>
-  <h2>Meu pet: {pokemon.name}</h2>
-  <img src={pokemon.sprites?.front_default} alt="Bulbasaur" width="150" />
-  <p>Tipo: {pokemon.types?.map((tipo) => tipo.type.name).join(", ")}</p>
-  <div style={{ textAlign: "center" }}>
-  <h3>Evolução do Bulbasaur</h3>
-
-  <h2>
-    {["Bulbasaur", "Ivysaur", "Venusaur"][etapaEvolucao]}
-  </h2>
-
-  <img
-    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${etapaEvolucao + 1}.png`}
-    alt="Evolução do Pokémon"
-    width="150"
-  />
-  <div className="status-pokemon">
-  {statusEvolucao.stats?.map((s) => (
-    <div className="status-linha" key={etapaEvolucao + s.stat.name}>
-      <span>{{ hp: "HP", attack: "Ataque", defense: "Defesa", "special-attack": "Atq. Esp.", "special-defense": "Def. Esp.", speed: "Veloc." }[s.stat.name]}</span>
-      <div className="status-barra">
-        <div className="status-preenchimento" style={{ width: `${Math.min(s.base_stat, 100)}%` }}></div>
-      </div>
-      <span>{s.base_stat}</span>
-    </div>
-  ))}
-</div>
-
-  <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
-    <button
-      onClick={() => setEtapaEvolucao(etapaEvolucao - 1)}
-      disabled={etapaEvolucao === 0}
-    >
-      ⬅ Anterior
-    </button>
-
-    <button
-      onClick={() => setEtapaEvolucao(etapaEvolucao + 1)}
-      disabled={etapaEvolucao === 2}
-    >
-      Próximo ➡
-    </button>
-  </div>
-</div>
+          <div className="perfil-card">
+            <h2>Sorteando seu pet...</h2>
+            <img className="roleta-img" src={imagemPokemon(idRoleta)} alt="Sorteando" width="150" />
+            <p>Quem será?</p>
+          </div>
         </div>
-        <div className="filme-card">
-        <h2>Meu filme favorito: {filme.Title}</h2>
-        {filme.Poster && filme.Poster !== "N/A" && (
-  <img src={filme.Poster} alt={`Pôster de ${filme.Title}`} className="poster-filme" />
-)}
-          <p>Gênero: {filme.Genre}</p>
-          <p>Premiações: {filme.Awards}</p>
-          <p>Nota IMDb: {filme.imdbRating}</p>
-          <p>Rotten Tomatoes: {filme.Ratings?.find((nota) => nota.Source === "Rotten Tomatoes")?.Value || "Não disponível"}</p>
+      </section>
+    )
+  }
+
+  if (!idBase) {
+    return (
+      <section id="center">
+        <div className="cards-container">
+          <div className="perfil-card">
+            <div className="misterio">?</div>
+            <h2>Quem será o seu pet?</h2>
+            <p>Aperte o botão para descobrir!</p>
+            <button onClick={sortearPet}>Descobrir meu pet</button>
           </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="carregando">
+        <div className="carregando-circulo"></div>
+        <p>Carregando...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="erro-tela">
+        <div className="erro-icone">⚠</div>
+        <h2>Ops! Algo deu errado</h2>
+        <p>Não foi possível carregar os dados. Verifique sua internet e tente novamente.</p>
+        <button onClick={() => window.location.reload()}>Tentar de novo</button>
+      </div>
+    )
+  }
+
+  return (
+    <section id="center">
+      <div className="cards-container">
+        <div className="perfil-card">
+          <h2>Meu pet: {maiuscula(pokemon.name)}</h2>
+          <img src={pokemon.sprites?.front_default} alt={pokemon.name} width="150" />
+          <p>Tipo: {pokemon.types?.map((tipo) => tipo.type.name).join(", ")}</p>
+          <div style={{ textAlign: "center" }}>
+            <h3>Evolução do {maiuscula(pokemon.name)}</h3>
+
+            <h2>{maiuscula(statusEvolucao.name)}</h2>
+
+            <img src={imagemPokemon(idEtapa)} alt="Evolução do Pokémon" width="150" />
+            <div className="status-pokemon">
+              {statusEvolucao.stats?.map((s) => (
+                <div className="status-linha" key={etapaEvolucao + s.stat.name}>
+                  <span>{{ hp: "HP", attack: "Ataque", defense: "Defesa", "special-attack": "Atq. Esp.", "special-defense": "Def. Esp.", speed: "Veloc." }[s.stat.name]}</span>
+                  <div className="status-barra">
+                    <div className="status-preenchimento" style={{ width: `${Math.min(s.base_stat, 100)}%` }}></div>
+                  </div>
+                  <span>{s.base_stat}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+              <button
+                onClick={() => setEtapaEvolucao(etapaEvolucao - 1)}
+                disabled={etapaEvolucao === 0}
+              >
+                ⬅ Anterior
+              </button>
+
+              <button
+                onClick={() => setEtapaEvolucao(etapaEvolucao + 1)}
+                disabled={etapaEvolucao >= evolucoes.length - 1}
+              >
+                Próximo ➡
+              </button>
+            </div>
+
+            <div style={{ marginTop: "20px" }}>
+              <button onClick={sortearPet}>🎲 Sortear outro pet</button>
+            </div>
           </div>
-      </section> 
-      
-      
-    
-    </>
+        </div>
+      </div>
+    </section>
   )
 }
 

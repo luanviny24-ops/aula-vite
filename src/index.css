@@ -559,3 +559,58 @@ body {
   border: 3px solid #111111;
   box-sizing: border-box;
 }
+
+.cards-container {
+  width: 100%;
+} 
+
+.misterio {
+  font-size: 90px;
+  line-height: 1.2;
+margin-bottom: 10px;
+  font-weight: bold;
+  color: #19ffe3;
+  text-shadow: 0 0 25px #19ffe3;
+  animation: pulsar 1.5s ease-in-out infinite;
+}
+@keyframes pulsar {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+.roleta-img {
+  filter: drop-shadow(0 0 15px #19ffe3);
+  animation: balancar 0.25s ease-in-out infinite;
+}
+@keyframes balancar {
+  0%, 100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+.meu-pet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px auto 0;
+  padding: 8px 14px;
+  width: fit-content;
+  color: #19ffe3;
+  font-weight: bold;
+  text-decoration: none;
+  background-color: #19ffe311;
+  border: 2px dashed #19ffe3;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+.meu-pet:hover {
+  box-shadow: 0 0 15px #19ffe3;
+  transform: scale(1.05);
+}
